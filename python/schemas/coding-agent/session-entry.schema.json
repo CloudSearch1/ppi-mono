@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi-mono.local/schema/session-entry.schema.json",
+  "title": "SessionEntry",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "timestamp", "message"],
+      "properties": {
+        "type": { "const": "message" },
+        "id": { "type": "string", "minLength": 1 },
+        "parent_id": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "message": { "$ref": "#/$defs/message" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "timestamp", "summary", "first_kept_entry_id", "tokens_before"],
+      "properties": {
+        "type": { "const": "compaction" },
+        "id": { "type": "string", "minLength": 1 },
+        "parent_id": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string" },
+        "first_kept_entry_id": { "type": "string" },
+        "tokens_before": { "type": "integer", "minimum": 0 },
+        "details": { "type": "object", "additionalProperties": true }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "timestamp", "summary"],
+      "properties": {
+        "type": { "const": "branch_summary" },
+        "id": { "type": "string", "minLength": 1 },
+        "parent_id": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string" },
+        "details": { "type": "object", "additionalProperties": true }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "timestamp", "custom_type"],
+      "properties": {
+        "type": { "enum": ["custom", "custom_message"] },
+        "id": { "type": "string", "minLength": 1 },
+        "parent_id": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "custom_type": { "type": "string", "minLength": 1 },
+        "data": {},
+        "content": {},
+        "display": { "type": "boolean" },
+        "details": {}
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "timestamp"],
+      "properties": {
+        "type": { "enum": ["label", "session_info"] },
+        "id": { "type": "string", "minLength": 1 },
+        "parent_id": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "label": { "type": ["string", "null"] },
+        "name": { "type": "string" }
+      }
+    }
+  ],
+  "$defs": {
+    "message": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "content", "timestamp"],
+          "properties": {
+            "role": { "const": "user" },
+            "content": {
+              "oneOf": [
+                { "type": "string" },
+                {
+                  "type": "array",
+                  "items": { "$ref": "#/$defs/contentBlock" }
+                }
+              ]
+            },
+            "timestamp": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "content", "api", "provider", "model", "stop_reason", "timestamp"],
+          "properties": {
+            "role": { "const": "assistant" },
+            "content": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/contentBlock" }
+            },
+            "api": { "type": "string" },
+            "provider": { "type": "string" },
+            "model": { "type": "string" },
+            "response_id": { "type": ["string", "null"] },
+            "usage": { "$ref": "#/$defs/usage" },
+            "stop_reason": { "type": "string" },
+            "error_message": { "type": ["string", "null"] },
+            "timestamp": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "tool_call_id", "tool_name", "content", "timestamp"],
+          "properties": {
+            "role": { "const": "toolResult" },
+            "tool_call_id": { "type": "string" },
+            "tool_name": { "type": "string" },
+            "content": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/contentBlock" }
+            },
+            "details": { "type": "object", "additionalProperties": true },
+            "is_error": { "type": "boolean" },
+            "timestamp": { "type": "integer" }
+          }
+        }
+      ]
+    },
+    "contentBlock": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "text"],
+          "additionalProperties": true,
+          "properties": {
+            "type": { "const": "text" },
+            "text": { "type": "string" },
+            "text_signature": { "type": ["string", "null"] }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "thinking"],
+          "additionalProperties": true,
+          "properties": {
+            "type": { "const": "thinking" },
+            "thinking": { "type": "string" },
+            "thinking_signature": { "type": ["string", "null"] },
+            "redacted": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "id", "name", "arguments"],
+          "additionalProperties": true,
+          "properties": {
+            "type": { "const": "toolCall" },
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "arguments": { "type": "object", "additionalProperties": true },
+            "thought_signature": { "type": ["string", "null"] }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "data"],
+          "additionalProperties": true,
+          "properties": {
+            "type": { "const": "image" },
+            "data": { "type": "string" },
+            "mime_type": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input", "output", "cache_read", "cache_write", "total_tokens"],
+      "properties": {
+        "input": { "type": "integer", "minimum": 0 },
+        "output": { "type": "integer", "minimum": 0 },
+        "cache_read": { "type": "integer", "minimum": 0 },
+        "cache_write": { "type": "integer", "minimum": 0 },
+        "total_tokens": { "type": "integer", "minimum": 0 },
+        "cost": { "type": "object", "additionalProperties": { "type": "number" } }
+      }
+    }
+  }
+}

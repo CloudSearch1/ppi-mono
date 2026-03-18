@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "schemas": {
+    "session-header": "session-header.schema.json",
+    "session-entry": "session-entry.schema.json",
+    "settings": "settings.schema.json",
+    "model-registry": "model-registry.schema.json"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi-mono.local/schema/model-registry.schema.json",
+  "title": "ModelRegistry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "providers"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "default_provider": { "type": ["string", "null"] },
+    "default_model_id": { "type": ["string", "null"] },
+    "providers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "api", "id"],
+          "properties": {
+            "provider": { "type": "string" },
+            "api": { "type": "string" },
+            "id": { "type": "string" },
+            "name": { "type": ["string", "null"] },
+            "base_url": { "type": ["string", "null"] },
+            "reasoning": { "type": "boolean" },
+            "input": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "output": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "context_window": { "type": ["integer", "null"] },
+            "max_output_tokens": { "type": ["integer", "null"] },
+            "compat": { "type": ["object", "null"], "additionalProperties": true }
+          }
+        }
+      }
+    }
+  }
+}

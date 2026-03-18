@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ppi-mono-python"
+version = "0.1.0"
+description = "Python reimplementation workspace for pi-mono"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7",
+  "httpx>=0.27",
+]
+
+[project.scripts]
+pimono = "ppi_coding_agent.cli.main:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.23",
+  "ruff>=0.6",
+  "mypy>=1.11",
+]
+tui = [
+  "textual>=0.82",
+  "prompt-toolkit>=3.0",
+  "rich>=13.7",
+]
+web = [
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "sqlalchemy>=2.0",
+  "alembic>=1.13",
+]
+mom = [
+  "slack_sdk>=3.33",
+  "apscheduler>=3.10",
+  "watchdog>=5.0",
+]
+pods = [
+  "asyncssh>=2.14",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ppi_*"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

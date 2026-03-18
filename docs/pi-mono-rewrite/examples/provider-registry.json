@@ -1,0 +1,28 @@
+{
+  "default": {
+    "provider": "openai",
+    "api": "openai-completions",
+    "base_url": "https://api.openai.com/v1",
+    "api_key": "sk-openai"
+  },
+  "routes": {
+    "openai": {
+      "provider": "openai",
+      "api": "openai-completions",
+      "base_url": "https://api.openai.com/v1",
+      "api_key": "sk-openai"
+    },
+    "openai:openai-responses": {
+      "provider": "openai",
+      "api": "openai-responses",
+      "base_url": "https://api.openai.com/v1",
+      "api_key": "sk-openai-responses"
+    },
+    "vllm": {
+      "provider": "openai",
+      "api": "openai-completions",
+      "base_url": "http://127.0.0.1:8000/v1",
+      "api_key": "EMPTY"
+    }
+  }
+}
