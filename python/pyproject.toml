@@ -52,6 +52,79 @@ include = ["ppi_*"]
 
 [tool.ruff]
 line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+  "E",      # pycodestyle errors
+  "W",      # pycodestyle warnings
+  "F",      # Pyflakes
+  "I",      # isort
+  "B",      # flake8-bugbear
+  "C4",     # flake8-comprehensions
+  "UP",     # pyupgrade
+  "ARG",    # flake8-unused-arguments
+  "SIM",    # flake8-simplify
+]
+ignore = [
+  "E501",   # line too long (handled by formatter)
+  "B008",   # do not perform function calls in argument defaults
+  "B904",   # raise without from inside except
+  "ARG001", # unused function argument
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ppi_ai", "ppi_agent_core", "ppi_coding_agent", "ppi_tui", "ppi_web", "ppi_mom", "ppi_pods"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_configs = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+  "textual.*",
+  "prompt_toolkit.*",
+  "rich.*",
+  "fastapi.*",
+  "uvicorn.*",
+  "sqlalchemy.*",
+  "alembic.*",
+  "slack_sdk.*",
+  "apscheduler.*",
+  "watchdog.*",
+  "asyncssh.*",
+]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+  "-v",
+  "--tb=short",
+  "--strict-markers",
+]
+markers = [
+  "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+  "integration: marks tests as integration tests",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]
