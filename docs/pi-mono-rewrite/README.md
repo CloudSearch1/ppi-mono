@@ -30,6 +30,7 @@
 - [26-ppi-ai-reuse-mapping.md](./26-ppi-ai-reuse-mapping.md)
 - [27-provider-templates-and-transports.md](./27-provider-templates-and-transports.md)
 - [28-coding-agent-persistence-schemas.md](./28-coding-agent-persistence-schemas.md)
+- [29-mom-pods-design.md](./29-mom-pods-design.md)
 - [16-python-implementation-task-breakdown.md](./16-python-implementation-task-breakdown.md)
 
 ## 说明
